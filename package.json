@@ -1,0 +1,33 @@
+{
+  "name": "toray-monitoring-system",
+  "version": "1.0.0",
+  "description": "Toray Composite Materials Manufacturing Process Monitoring System",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "build": "npm run server:build && npm run client:build",
+    "server:build": "cd server && npm run build",
+    "client:build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "lint": "npm run server:lint && npm run client:lint",
+    "server:lint": "cd server && npm run lint",
+    "client:lint": "cd client && npm run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "manufacturing",
+    "monitoring",
+    "traceability",
+    "toray",
+    "carbon-fiber",
+    "prepreg",
+    "composite-materials"
+  ],
+  "author": "Toray Composite Materials Development Team",
+  "license": "MIT"
+}
