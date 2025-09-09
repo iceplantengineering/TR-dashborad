@@ -65,5 +65,19 @@ export const authenticateDemo = (username: string, password: string): { token: s
 // Check if we're in demo mode (no API URL configured)
 export const isDemoMode = (): boolean => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  return !apiUrl || apiUrl.trim() === '';
+  console.log('isDemoMode check - VITE_API_URL:', apiUrl);
+  console.log('isDemoMode check - typeof:', typeof apiUrl);
+  console.log('isDemoMode check - length:', apiUrl?.length);
+  
+  // More robust demo mode detection
+  const isDemo = !apiUrl || 
+                apiUrl.trim() === '' || 
+                apiUrl === 'undefined' || 
+                apiUrl === 'null' ||
+                apiUrl === '""' ||
+                apiUrl === "''" ||
+                apiUrl.includes('localhost') === false && apiUrl.includes('http') === false;
+                
+  console.log('isDemoMode result:', isDemo);
+  return isDemo;
 };

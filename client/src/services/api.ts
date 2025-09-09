@@ -43,20 +43,28 @@ import { isDemoMode, authenticateDemo } from './demoData';
 // Auth API
 export const authAPI = {
   login: async (username: string, password: string): Promise<{ token: string; user: User }> => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+    console.log('Login attempt - API URL:', apiUrl);
+    console.log('Login attempt - is Demo Mode:', isDemoMode());
+    console.log('Login attempt - username:', username);
+    
     // Check if we're in demo mode (no API URL configured)
     if (isDemoMode()) {
       console.log('Demo mode: Using local authentication');
       const demoAuth = authenticateDemo(username, password);
+      console.log('Demo authentication result:', demoAuth);
       if (demoAuth) {
         // Store token in localStorage for demo mode
         localStorage.setItem('authToken', demoAuth.token);
         localStorage.setItem('user', JSON.stringify(demoAuth.user));
         return demoAuth;
       } else {
-        throw new Error('Invalid demo credentials');
+        console.error('Invalid demo credentials for username:', username);
+        throw new Error('Invalid demo credentials. Try: admin/admin123, operator1/demo, quality_mgr/demo, executive/demo');
       }
     }
 
+    console.log('Normal API mode - attempting to connect to:', API_BASE_URL);
     // Normal API mode
     const response = await api.post('/auth/login', { username, password });
     return response.data;
