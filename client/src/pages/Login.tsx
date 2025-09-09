@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/hooks/redux';
 import { authActions, uiActions } from '@/store';
 import { authAPI } from '@/services/api';
+import { isDemoMode, DEMO_USERS } from '@/services/demoData';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
 const { Title, Text, Paragraph } = Typography;
@@ -56,15 +57,15 @@ const Login: React.FC = () => {
   };
 
   const demoAccounts = [
-    { username: 'operator1', role: 'Operator', description: 'Process control and monitoring' },
-    { username: 'quality_mgr', role: 'Quality Manager', description: 'Quality control and reports' },
-    { username: 'prod_mgr', role: 'Production Manager', description: 'Production oversight and analytics' },
-    { username: 'env_officer', role: 'Environmental Officer', description: 'Environmental monitoring and compliance' },
-    { username: 'executive', role: 'Executive', description: 'Strategic dashboard and reports' },
+    { username: 'admin', role: 'Production Manager', description: 'Full access to all features (Password: admin123)' },
+    { username: 'operator1', role: 'Operator', description: 'Process control and monitoring (Password: demo)' },
+    { username: 'quality_mgr', role: 'Quality Manager', description: 'Quality control and reports (Password: demo)' },
+    { username: 'executive', role: 'Executive', description: 'Strategic dashboard and reports (Password: demo)' },
   ];
 
   const handleDemoLogin = (username: string) => {
-    form.setFieldsValue({ username, password: 'demo' });
+    const password = username === 'admin' ? 'admin123' : 'demo';
+    form.setFieldsValue({ username, password });
   };
 
   return (
@@ -109,6 +110,13 @@ const Login: React.FC = () => {
           <Text type="secondary" style={{ fontSize: '16px' }}>
             Manufacturing Process Control & Analytics
           </Text>
+          {isDemoMode() && (
+            <div style={{ marginTop: '12px' }}>
+              <Text type="warning" style={{ fontSize: '14px', fontWeight: 'bold' }}>
+                🔧 Demo Mode - No Backend Required
+              </Text>
+            </div>
+          )}
         </div>
 
         {error && (

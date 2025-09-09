@@ -38,9 +38,26 @@ api.interceptors.response.use(
   }
 );
 
+import { isDemoMode, authenticateDemo } from './demoData';
+
 // Auth API
 export const authAPI = {
   login: async (username: string, password: string): Promise<{ token: string; user: User }> => {
+    // Check if we're in demo mode (no API URL configured)
+    if (isDemoMode()) {
+      console.log('Demo mode: Using local authentication');
+      const demoAuth = authenticateDemo(username, password);
+      if (demoAuth) {
+        // Store token in localStorage for demo mode
+        localStorage.setItem('authToken', demoAuth.token);
+        localStorage.setItem('user', JSON.stringify(demoAuth.user));
+        return demoAuth;
+      } else {
+        throw new Error('Invalid demo credentials');
+      }
+    }
+
+    // Normal API mode
     const response = await api.post('/auth/login', { username, password });
     return response.data;
   },
