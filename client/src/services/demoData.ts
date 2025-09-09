@@ -9,7 +9,12 @@ export const DEMO_USERS: Record<string, { user: User; password: string }> = {
       email: 'admin@toray.com',
       role: 'production_manager',
       department: 'Production',
-      permissions: ['read', 'write', 'admin'],
+      permissions: [
+        'read', 'write', 'admin',
+        'view_process', 'quality_input', 'quality_reports',
+        'view_environmental', 'environmental_reports',
+        'view_reports', 'view_analytics'
+      ],
     },
     password: 'admin123'
   },
@@ -20,7 +25,9 @@ export const DEMO_USERS: Record<string, { user: User; password: string }> = {
       email: 'operator1@toray.com',
       role: 'operator',
       department: 'Production',
-      permissions: ['read'],
+      permissions: [
+        'read', 'view_process'
+      ],
     },
     password: 'demo'
   },
@@ -31,7 +38,10 @@ export const DEMO_USERS: Record<string, { user: User; password: string }> = {
       email: 'quality@toray.com',
       role: 'quality_manager',
       department: 'Quality Control',
-      permissions: ['read', 'write'],
+      permissions: [
+        'read', 'write', 'view_process',
+        'quality_input', 'quality_reports'
+      ],
     },
     password: 'demo'
   },
@@ -42,7 +52,10 @@ export const DEMO_USERS: Record<string, { user: User; password: string }> = {
       email: 'executive@toray.com',
       role: 'executive',
       department: 'Management',
-      permissions: ['read'],
+      permissions: [
+        'read', 'view_reports', 'view_analytics',
+        'view_environmental', 'environmental_reports'
+      ],
     },
     password: 'demo'
   }
