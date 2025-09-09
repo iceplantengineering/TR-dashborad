@@ -185,6 +185,36 @@ const Reports: React.FC = () => {
     window.print();
   };
 
+  const getTranslatedType = (type: string) => {
+    switch (type) {
+      case 'Production': return t('reports.production');
+      case 'Quality': return t('reports.quality');
+      case 'Environmental': return t('reports.environmental');
+      case 'Equipment': return 'Equipment';
+      case 'ESG': return 'ESG';
+      default: return type;
+    }
+  };
+
+  const getTranslatedStatus = (status: string) => {
+    switch (status) {
+      case 'completed': return t('reports.completed');
+      case 'processing': return t('reports.processing');
+      default: return status;
+    }
+  };
+
+  const getTranslatedReportName = (name: string) => {
+    switch (name) {
+      case 'Monthly Production Summary': return t('reports.monthlyProductionSummary');
+      case 'Quality Assurance Report': return t('reports.qualityAssuranceReport');
+      case 'Environmental Compliance': return t('reports.environmentalCompliance');
+      case 'Equipment Performance': return t('reports.equipmentPerformance');
+      case 'ESG Sustainability Report': return t('reports.esgSustainabilityReport');
+      default: return name;
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -195,10 +225,10 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Total Production"
+              title={t('reports.totalProduction')}
               value={productionData?.totalProduction || 1250.5}
               precision={1}
-              suffix="tons"
+              suffix={t('reports.tons')}
               valueStyle={{ color: '#1890ff' }}
               prefix={<BarChartOutlined />}
             />
@@ -207,7 +237,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Overall Efficiency"
+              title={t('reports.overallEfficiency')}
               value={productionData?.efficiency || 95.8}
               precision={1}
               suffix="%"
@@ -219,7 +249,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Quality Rate"
+              title={t('reports.qualityRate')}
               value={productionData?.qualityRate || 99.2}
               precision={1}
               suffix="%"
@@ -231,10 +261,10 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Downtime"
+              title={t('reports.downtime')}
               value={productionData?.downtime?.total || 4.2}
               precision={1}
-              suffix="hrs"
+              suffix={t('reports.hrs')}
               valueStyle={{ color: '#faad14' }}
               prefix={<ClockCircleOutlined />}
             />
@@ -244,7 +274,7 @@ const Reports: React.FC = () => {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
-          <Card title="Production Trend" extra={<Tag color="blue">7 Days</Tag>}>
+          <Card title={t('reports.productionTrend')} extra={<Tag color="blue">7 {t('reports.days')}</Tag>}>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={productionTrendData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -256,7 +286,7 @@ const Reports: React.FC = () => {
                   dataKey="production" 
                   stroke="#1890ff" 
                   strokeWidth={3}
-                  name="Production (tons)"
+                  name={`${t('reports.production')} (${t('reports.tons')})`}
                 />
                 <Line 
                   type="monotone" 
@@ -264,14 +294,14 @@ const Reports: React.FC = () => {
                   stroke="#52c41a" 
                   strokeWidth={2}
                   strokeDasharray="5 5"
-                  name="Target (tons)"
+                  name={`Target (${t('reports.tons')})`}
                 />
               </LineChart>
             </ResponsiveContainer>
           </Card>
         </Col>
         <Col xs={24} lg={8}>
-          <Card title="Production by Process Type">
+          <Card title={t('reports.productionByProcessType')}>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -287,15 +317,22 @@ const Reports: React.FC = () => {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <RechartsTooltip formatter={(value) => [`${value} tons`, 'Production']} />
+                <RechartsTooltip formatter={(value) => [`${value} ${t('reports.tons')}`, t('reports.production')]} />
               </PieChart>
             </ResponsiveContainer>
             <div style={{ textAlign: 'center', marginTop: 16 }}>
-              {processTypeData.map((item, index) => (
-                <Tag key={index} color={item.color} style={{ margin: '4px' }}>
-                  {item.name}: {item.value}t
-                </Tag>
-              ))}
+              <Tag color="#1890ff" style={{ margin: '4px' }}>
+                PAN: 425.2{t('reports.tons')}
+              </Tag>
+              <Tag color="#52c41a" style={{ margin: '4px' }}>
+                Carbon Fiber: 380.8{t('reports.tons')}
+              </Tag>
+              <Tag color="#faad14" style={{ margin: '4px' }}>
+                Prepreg: 290.5{t('reports.tons')}
+              </Tag>
+              <Tag color="#f5222d" style={{ margin: '4px' }}>
+                Composite: 154.0{t('reports.tons')}
+              </Tag>
             </div>
           </Card>
         </Col>
@@ -309,7 +346,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Overall Quality"
+              title={t('reports.overallQuality')}
               value={qualityData?.overallQuality || 99.2}
               precision={1}
               suffix="%"
@@ -321,7 +358,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Defect Rate"
+              title={t('reports.defectRate')}
               value={qualityData?.defectRate || 0.8}
               precision={1}
               suffix="%"
@@ -333,7 +370,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="First Pass Yield"
+              title={t('reports.firstPassYield')}
               value={qualityData?.firstPassYield || 96.5}
               precision={1}
               suffix="%"
@@ -345,7 +382,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Customer Complaints"
+              title={t('reports.customerComplaints')}
               value={qualityData?.customerComplaints || 2}
               valueStyle={{ color: '#f5222d' }}
               prefix={<ExclamationCircleOutlined />}
@@ -354,7 +391,7 @@ const Reports: React.FC = () => {
         </Col>
       </Row>
 
-      <Card title="Quality Trend Analysis">
+      <Card title={t('reports.qualityTrendAnalysis')}>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={qualityTrendData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -390,7 +427,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Environmental Score"
+              title={t('reports.environmentalScore')}
               value={environmentalData?.overallScore || 92.5}
               precision={1}
               suffix="%"
@@ -414,7 +451,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Energy Efficiency"
+              title={t('environmental.energyEfficiency')}
               value={environmentalData?.energyConsumption?.efficiency || 94.8}
               precision={1}
               suffix="%"
@@ -426,7 +463,7 @@ const Reports: React.FC = () => {
         <Col xs={24} sm={6}>
           <Card>
             <Statistic
-              title="Waste Recycled"
+              title={t('environmental.waterRecycled')}
               value={environmentalData?.wasteManagement?.recyclingRate || 87.5}
               precision={1}
               suffix="%"
@@ -436,7 +473,7 @@ const Reports: React.FC = () => {
         </Col>
       </Row>
 
-      <Card title="Environmental Compliance Status">
+      <Card title={t('reports.environmentalComplianceStatus')}>
         <List
           grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 3, xxl: 3 }}
           dataSource={[
@@ -497,15 +534,15 @@ const Reports: React.FC = () => {
               onChange={setPeriod}
               style={{ width: 120 }}
             >
-              <Option value={7}>7 Days</Option>
-              <Option value={30}>30 Days</Option>
-              <Option value={90}>90 Days</Option>
+              <Option value={7}>7 {t('reports.days')}</Option>
+              <Option value={30}>30 {t('reports.days')}</Option>
+              <Option value={90}>90 {t('reports.days')}</Option>
             </Select>
             <Button icon={<PrinterOutlined />} onClick={handlePrintReport}>
-              Print
+              {t('reports.print')}
             </Button>
             <Button type="primary" icon={<DownloadOutlined />}>
-              Export All
+              {t('reports.exportAll')}
             </Button>
           </Space>
         </Col>
@@ -515,19 +552,19 @@ const Reports: React.FC = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={16}>
           <Tabs activeKey={activeTab} onChange={setActiveTab}>
-            <TabPane tab="Production" key="production" icon={<BarChartOutlined />}>
+            <TabPane tab={t('reports.production')} key="production" icon={<BarChartOutlined />}>
               <ProductionTab />
             </TabPane>
-            <TabPane tab="Quality" key="quality" icon={<SafetyOutlined />}>
+            <TabPane tab={t('reports.quality')} key="quality" icon={<SafetyOutlined />}>
               <QualityTab />
             </TabPane>
-            <TabPane tab="Environmental" key="environmental" icon={<GlobalOutlined />}>
+            <TabPane tab={t('reports.environmental')} key="environmental" icon={<GlobalOutlined />}>
               <EnvironmentalTab />
             </TabPane>
           </Tabs>
         </Col>
         <Col xs={24} lg={8}>
-          <Card title="Recent Reports" extra={<CalendarOutlined />}>
+          <Card title={t('reports.recentReports')} extra={<CalendarOutlined />}>
             <List
               size="small"
               dataSource={recentReports}
@@ -554,7 +591,7 @@ const Reports: React.FC = () => {
                     }
                     title={
                       <div>
-                        <Text strong>{item.name}</Text>
+                        <Text strong>{getTranslatedReportName(item.name)}</Text>
                         <Badge 
                           status={item.status === 'completed' ? 'success' : 'processing'}
                           style={{ marginLeft: 8 }}
@@ -563,7 +600,7 @@ const Reports: React.FC = () => {
                     }
                     description={
                       <div>
-                        <Tag color="blue">{item.type}</Tag>
+                        <Tag color="blue">{getTranslatedType(item.type)}</Tag>
                         <br />
                         <Text type="secondary" style={{ fontSize: '12px' }}>
                           {format(item.createdAt, 'MMM dd, yyyy HH:mm')} • {item.size}
