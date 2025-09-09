@@ -22,9 +22,11 @@ A comprehensive manufacturing execution system (MES) for real-time process monit
 - **Audit Trail**: Complete activity logging and traceability
 
 ### Reporting & Compliance
-- **Automated Reports**: Production, quality, environmental, and ESG reports
-- **Compliance Tracking**: ISO 9001, ISO 14001, and industry-specific standards
-- **Export Capabilities**: PDF, Excel, and CSV export options
+- **Comprehensive Reports Dashboard**: Multi-tab interface for production, quality, and environmental reports
+- **Environmental Dashboard**: Real-time emissions monitoring, energy efficiency tracking, and sustainability targets
+- **Automated Reports**: Production, quality, environmental, and ESG reports with download capabilities
+- **Compliance Tracking**: ISO 9001, ISO 14001, and industry-specific standards with visual status indicators
+- **Export Capabilities**: PDF, Excel, and CSV export options with print functionality
 
 ## 🏗️ Architecture
 
@@ -186,7 +188,9 @@ The application provides comprehensive internationalization support:
 │   │   │   ├── Dashboard.tsx
 │   │   │   ├── ProcessMonitoring.tsx
 │   │   │   ├── EquipmentStatus.tsx
-│   │   │   └── QualityManagement.tsx
+│   │   │   ├── QualityManagement.tsx
+│   │   │   ├── EnvironmentalDashboard.tsx  # Environmental monitoring
+│   │   │   └── Reports.tsx                 # Comprehensive reporting
 │   │   ├── i18n/          # Internationalization
 │   │   │   ├── index.ts   # i18n configuration
 │   │   │   └── locales/   # Translation files (ja.json, en.json)
@@ -425,6 +429,14 @@ npx serve dist  # Test production build locally
 ```
 
 ## 🔄 Version History
+
+- **v1.2.0** - Enhanced Dashboard Suite with Complete Demo Mode
+  - **New Environmental Dashboard**: Comprehensive environmental monitoring with emissions tracking, energy consumption, waste management, and sustainability targets
+  - **New Reports Dashboard**: Multi-tab reporting interface with production, quality, and environmental analytics
+  - **Complete Demo Mode**: Full offline capability with realistic demo data for all API endpoints
+  - **Advanced Visualizations**: Interactive charts including line charts, area charts, pie charts, and progress indicators
+  - **Responsive Design**: Mobile-optimized layouts with consistent styling across all pages
+  - **Enhanced Data Coverage**: Expanded metrics for environmental compliance, ESG sustainability, and detailed reporting
 
 - **v1.1.0** - Netlify deployment ready with production optimizations
   - Added Netlify configuration with SPA support
