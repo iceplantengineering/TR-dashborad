@@ -439,8 +439,8 @@ const QualityManagement: React.FC = () => {
             />
             <div style={{ marginTop: '8px' }}>
               <Space size="small">
-                <Tag color="green" size="small">{qualityMetrics.gradeDistribution.A} {t('quality.aGrade')}</Tag>
-                <Tag color="blue" size="small">{qualityMetrics.gradeDistribution.B} {t('quality.bGrade')}</Tag>
+                <Tag color="green">{qualityMetrics.gradeDistribution.A} {t('quality.aGrade')}</Tag>
+                <Tag color="blue">{qualityMetrics.gradeDistribution.B} {t('quality.bGrade')}</Tag>
               </Space>
             </div>
           </Card>

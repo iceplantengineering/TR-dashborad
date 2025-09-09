@@ -355,7 +355,7 @@ const Dashboard: React.FC = () => {
                     avatar={getStatusIcon(item.severity)}
                     title={
                       <Space>
-                        <Tag color={getStatusColor(item.severity)} size="small">
+                        <Tag color={getStatusColor(item.severity)}>
                           {item.severity.toUpperCase()}
                         </Tag>
                         {item.type.replace('_', ' ').toUpperCase()}

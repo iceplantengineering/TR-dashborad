@@ -18,7 +18,6 @@ import QualityManagement from '@/pages/QualityManagement';
 import EnvironmentalDashboard from '@/pages/EnvironmentalDashboard';
 import Reports from '@/pages/Reports';
 import Settings from '@/pages/Settings';
-import LoadingSpinner from '@/components/LoadingSpinner';
 import NotificationManager from '@/components/NotificationManager';
 
 // Protected Route component
@@ -42,8 +41,8 @@ const AppContent: React.FC = () => {
 
     // Initialize language from localStorage
     const savedLanguage = localStorage.getItem('language');
-    if (savedLanguage && window.i18n) {
-      window.i18n.changeLanguage(savedLanguage);
+    if (savedLanguage && (window as any).i18n) {
+      (window as any).i18n.changeLanguage(savedLanguage);
     }
 
     // Initialize user from localStorage
@@ -100,10 +99,16 @@ const AppContent: React.FC = () => {
       };
 
       const handleProcessData = (data: any) => {
+        console.log('WebSocket received processData:', data);
+        console.log('processData array length:', data?.length);
+        console.log('Dispatching addProcessData to Redux store...');
         dispatch(dashboardActions.addProcessData(data));
+        console.log('addProcessData dispatched successfully');
       };
 
       const handleEquipmentStatus = (data: any) => {
+        console.log('WebSocket received equipmentStatus:', data);
+        console.log('equipment array length:', data?.length);
         dispatch(dashboardActions.setEquipment(data));
       };
 
@@ -117,6 +122,7 @@ const AppContent: React.FC = () => {
       };
 
       const handleKPIUpdate = (data: any) => {
+        console.log('WebSocket received kpiUpdate:', data);
         dispatch(dashboardActions.setKPIs(data));
       };
 

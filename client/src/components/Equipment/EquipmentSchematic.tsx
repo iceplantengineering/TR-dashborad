@@ -186,11 +186,7 @@ const EquipmentSchematic: React.FC<EquipmentSchematicProps> = ({ equipment }) =>
                         borderRadius: '16px',
                         minWidth: '120px',
                         cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                        '&:hover': {
-                          transform: 'scale(1.05)',
-                          boxShadow: `0 8px 25px ${getStatusColor(eq.status)}33`
-                        }
+                        transition: 'all 0.3s ease'
                       }}>
                         {/* Equipment Icon */}
                         <div style={{ 

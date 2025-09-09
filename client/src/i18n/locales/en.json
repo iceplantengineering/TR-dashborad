@@ -1,8 +1,10 @@
 {
   "common": {
     "dashboard": "Dashboard",
+    "processMonitoring": "Process Monitoring",
     "equipment": "Equipment",
     "quality": "Quality",
+    "environmental": "Environmental",
     "reports": "Reports",
     "settings": "Settings",
     "logout": "Logout",

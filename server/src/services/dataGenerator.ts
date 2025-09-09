@@ -283,12 +283,20 @@ export class DataGenerator {
     this.updateEquipmentStatus();
 
     // Emit to connected clients
+    console.log('Emitting processData:', processData.length, 'items');
     this.io.emit('processData', processData);
+    console.log('Emitting equipmentStatus:', this.equipmentList.length, 'items');
     this.io.emit('equipmentStatus', this.equipmentList);
     if (alert) {
       this.io.emit('newAlert', alert);
       logger.warn(`New alert generated: ${alert.message}`);
     }
+    
+    // Also broadcast to specific process rooms for debugging
+    processData.forEach(data => {
+      console.log(`Broadcasting ${data.processType} data to room: process:${data.processType}`);
+      this.io.to(`process:${data.processType}`).emit('processData', [data]);
+    });
 
     // Calculate and emit KPIs
     const kpis = this.calculateKPIs();

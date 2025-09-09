@@ -161,8 +161,8 @@ const ActualRealtimeChart: React.FC<RealtimeChartProps> = ({
     return null;
   };
 
-  const formatYAxisTick = (value: number) => {
-    return Math.round(value / 10) * 10; // 10の倍数で表示
+  const formatYAxisTick = (value: number): string => {
+    return String(Math.round(value / 10) * 10); // 10の倍数で表示
   };
 
   if (!chartData || chartData.length === 0) {

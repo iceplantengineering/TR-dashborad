@@ -369,13 +369,75 @@ For support and questions:
 - Contact the development team
 - Check the documentation and FAQ
 
+## 🚀 Deployment
+
+### Netlify Deployment (Production Ready)
+
+This application is fully configured for deployment on Netlify with proper SPA routing and environment handling.
+
+#### Quick Deploy to Netlify
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Prepare for Netlify deployment"
+   git push origin main
+   ```
+
+2. **Netlify Setup**
+   - Connect your GitHub repository to Netlify
+   - Build settings are automatically configured via `netlify.toml`
+   - No additional configuration needed
+
+#### Configuration Files
+
+The following files are configured for production deployment:
+
+- **`netlify.toml`**: Build configuration, SPA redirects, security headers
+- **`client/.env.production`**: Production environment variables
+- **`client/vite.config.ts`**: Optimized build settings with code splitting
+
+#### Environment Variables (Optional)
+
+Set these in Netlify dashboard if connecting to live backend:
+```
+VITE_API_URL=https://your-api-domain.com/api
+VITE_WS_URL=https://your-websocket-domain.com
+VITE_ENVIRONMENT=production
+```
+
+If not set, the app runs with demo data and gracefully handles missing WebSocket connections.
+
+#### Features
+- ✅ SPA routing with proper redirects
+- ✅ Optimized bundles (vendor, antd, charts chunks)
+- ✅ Security headers configured
+- ✅ WebSocket fallback handling
+- ✅ Multi-language support preserved
+- ✅ Static asset caching
+
+### Manual Production Build
+
+```bash
+cd client
+npm run build
+npx serve dist  # Test production build locally
+```
+
 ## 🔄 Version History
 
+- **v1.1.0** - Netlify deployment ready with production optimizations
+  - Added Netlify configuration with SPA support
+  - WebSocket connection graceful degradation
+  - TypeScript strict mode optimizations
+  - Production build bundle splitting
+  - Security headers and caching configuration
+
 - **v1.0.0** - Initial release with core monitoring features
-- Real-time dashboard and process monitoring
-- Equipment management and maintenance scheduling
-- Quality control and environmental tracking
-- Role-based user management
+  - Real-time dashboard and process monitoring
+  - Equipment management and maintenance scheduling
+  - Quality control and environmental tracking
+  - Role-based user management
 
 ## 🎯 Future Roadmap
 

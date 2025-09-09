@@ -26,7 +26,15 @@ const RealtimeChart: React.FC<RealtimeChartProps> = ({
   timeRange,
   showControls = false,
 }) => {
+  // Debug props
+  React.useEffect(() => {
+    console.log('RealtimeChart - data prop updated:', data.length, 'items');
+    console.log('RealtimeChart - timeRange:', timeRange);
+    console.log('RealtimeChart - latest data:', data.slice(-2));
+  }, [data, timeRange]);
+
   const chartData = useMemo(() => {
+    console.log('RealtimeChart - useMemo recalculating with', data.length, 'items');
     const now = new Date();
     let cutoffTime: Date;
     
@@ -48,6 +56,8 @@ const RealtimeChart: React.FC<RealtimeChartProps> = ({
     }
 
     const filteredData = data.filter(d => isAfter(new Date(d.timestamp), cutoffTime));
+    console.log('RealtimeChart - after time filtering:', filteredData.length, 'items');
+    console.log('RealtimeChart - cutoffTime:', cutoffTime.toISOString());
     
     // Group data by time intervals and process type
     const groupedData = filteredData.reduce((acc, item) => {
@@ -111,17 +121,32 @@ const RealtimeChart: React.FC<RealtimeChartProps> = ({
     }, {} as any);
 
     // Convert to array and calculate averages
-    const chartData = Object.values(groupedData).map((group: any) => ({
-      timestamp: group.timestamp,
-      time: format(group.time, timeRange === '7d' ? 'MMM dd HH:mm' : 'HH:mm'),
-      temperature: group.temperature.reduce((sum: number, val: number) => sum + val, 0) / group.temperature.length,
-      pressure: group.pressure.reduce((sum: number, val: number) => sum + val, 0) / group.pressure.length,
-      efficiency: group.efficiency.reduce((sum: number, val: number) => sum + val, 0) / group.efficiency.length,
-      co2Emission: group.co2Emission.reduce((sum: number, val: number) => sum + val, 0) / group.co2Emission.length,
-      qualityScore: group.qualityScore.reduce((sum: number, val: number) => sum + val, 0) / group.qualityScore.length,
-    }));
+    const chartData = Object.values(groupedData).map((group: any) => {
+      const avgTemp = group.temperature.reduce((sum: number, val: number) => sum + val, 0) / group.temperature.length;
+      const avgCO2 = group.co2Emission.reduce((sum: number, val: number) => sum + val, 0) / group.co2Emission.length;
+      
+      return {
+        timestamp: group.timestamp,
+        time: format(group.time, timeRange === '7d' ? 'MMM dd HH:mm' : 'HH:mm'),
+        // Normalize temperature (assume 0-500°C range) to 0-100 scale
+        temperature: Math.min(100, (avgTemp / 500) * 100),
+        // Keep pressure as is (usually 0-10 MPa, multiply by 10 to fit 0-100 scale)
+        pressure: (group.pressure.reduce((sum: number, val: number) => sum + val, 0) / group.pressure.length) * 10,
+        efficiency: group.efficiency.reduce((sum: number, val: number) => sum + val, 0) / group.efficiency.length,
+        // Normalize CO2 emission (assume 0-100 kg/h range) to 0-100 scale  
+        co2Emission: Math.min(100, avgCO2),
+        qualityScore: group.qualityScore.reduce((sum: number, val: number) => sum + val, 0) / group.qualityScore.length,
+        // Store original values for tooltip
+        originalTemp: avgTemp,
+        originalCO2: avgCO2,
+        originalPressure: group.pressure.reduce((sum: number, val: number) => sum + val, 0) / group.pressure.length,
+      };
+    });
 
-    return chartData.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    const sortedData = chartData.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+    console.log('RealtimeChart - final chartData:', sortedData.length, 'items');
+    console.log('RealtimeChart - latest chart points:', sortedData.slice(-2));
+    return sortedData;
   }, [data, timeRange]);
 
   const customTooltip = ({ active, payload, label }: any) => {
@@ -137,20 +162,38 @@ const RealtimeChart: React.FC<RealtimeChartProps> = ({
           <p className="recharts-tooltip-label" style={{ margin: 0, marginBottom: '5px', fontWeight: 'bold' }}>
             {label}
           </p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} style={{ 
-              color: entry.color, 
-              margin: 0,
-              fontSize: '13px'
-            }}>
-              {entry.name}: {typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value}
-              {entry.name === 'Temperature' && '°C'}
-              {entry.name === 'Pressure' && ' MPa'}
-              {entry.name === 'Efficiency' && '%'}
-              {entry.name === 'Quality Score' && '%'}
-              {entry.name === 'CO₂ Emission' && ' kg/h'}
-            </p>
-          ))}
+          {payload.map((entry: any, index: number) => {
+            const data = payload[0]?.payload;
+            let displayValue = entry.value;
+            let unit = '';
+            
+            // Show original values in tooltip
+            if (entry.name === 'Temperature' && data?.originalTemp) {
+              displayValue = data.originalTemp.toFixed(1);
+              unit = '°C';
+            } else if (entry.name === 'Pressure' && data?.originalPressure) {
+              displayValue = data.originalPressure.toFixed(2);
+              unit = ' MPa';
+            } else if (entry.name === 'CO₂ Emission' && data?.originalCO2) {
+              displayValue = data.originalCO2.toFixed(1);
+              unit = ' kg/h';
+            } else if (entry.name === 'Efficiency' || entry.name === 'Quality Score') {
+              displayValue = typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value;
+              unit = '%';
+            } else {
+              displayValue = typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value;
+            }
+            
+            return (
+              <p key={index} style={{ 
+                color: entry.color, 
+                margin: 0,
+                fontSize: '13px'
+              }}>
+                {entry.name}: {displayValue}{unit}
+              </p>
+            );
+          })}
         </div>
       );
     }
@@ -176,7 +219,10 @@ const RealtimeChart: React.FC<RealtimeChartProps> = ({
         />
         <YAxis 
           tick={{ fontSize: 12 }}
-          domain={['dataMin - 5', 'dataMax + 5']}
+          domain={[0, 100]}
+          tickCount={6}
+          tickFormatter={(value) => `${value}`}
+          label={{ value: 'Normalized Values (0-100)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fontSize: '12px' } }}
         />
         <Tooltip content={customTooltip} />
         <Legend />

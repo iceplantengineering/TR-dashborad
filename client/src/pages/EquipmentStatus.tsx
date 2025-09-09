@@ -33,14 +33,25 @@ import { equipmentAPI } from '@/services/api';
 import { Equipment } from '@/types';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
+import { ConfigProvider } from 'antd';
+import enUS from 'antd/locale/en_US';
+import jaJP from 'antd/locale/ja_JP';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
 const EquipmentStatus: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const { equipment } = useAppSelector(selectDashboard);
+  
+  // Debug log for equipment state (only once per render)
+  React.useEffect(() => {
+    console.log('Equipment from store:', equipment);
+    console.log('Equipment array length:', equipment?.length);
+    console.log('First equipment item:', equipment?.[0]);
+  }, [equipment]);
+
   
   const [loading, setLoading] = useState(false);
   const [maintenanceModalVisible, setMaintenanceModalVisible] = useState(false);
@@ -53,14 +64,20 @@ const EquipmentStatus: React.FC = () => {
   }, []);
 
   const loadEquipmentData = async () => {
+    console.log('loadEquipmentData called');
     setLoading(true);
     try {
       const response = await equipmentAPI.getStatus();
+      console.log('Equipment API response:', response);
+      console.log('Response equipment array:', response.equipment);
+      console.log('Response equipment length:', response.equipment?.length);
       dispatch(dashboardActions.setEquipment(response.equipment));
+      console.log('Equipment data dispatched to store');
     } catch (error) {
       console.error('Error loading equipment data:', error);
     } finally {
       setLoading(false);
+      console.log('Loading set to false');
     }
   };
 
@@ -124,6 +141,13 @@ const EquipmentStatus: React.FC = () => {
   const filteredEquipment = equipment.filter(eq => 
     statusFilter === 'all' || eq.status === statusFilter
   );
+  
+  // Debug filtered equipment
+  React.useEffect(() => {
+    console.log('Status filter:', statusFilter);
+    console.log('Filtered equipment:', filteredEquipment);
+    console.log('Filtered equipment length:', filteredEquipment?.length);
+  }, [filteredEquipment, statusFilter]);
 
   const equipmentSummary = {
     total: equipment.length,
@@ -134,15 +158,26 @@ const EquipmentStatus: React.FC = () => {
     avgEfficiency: equipment.reduce((sum, eq) => sum + eq.efficiency, 0) / equipment.length,
   };
 
-  const tableColumns = [
+  // Debug table rendering
+  React.useEffect(() => {
+    console.log('EquipmentStatus - Table columns being created with language:', i18n.language);
+    console.log('EquipmentStatus - Column titles:');
+    console.log('  equipment.equipment:', t('equipment.equipment'));
+    console.log('  common.status:', t('common.status'));
+    console.log('  dashboard.efficiency:', t('dashboard.efficiency'));
+  }, [i18n.language, t]);
+
+  // Table columns with proper dependency on language changes
+  const tableColumns = React.useMemo(() => [
     {
       title: t('equipment.equipment'),
+      dataIndex: 'name',
       key: 'equipment',
-      render: (record: Equipment) => (
+      render: (name: string, record: Equipment) => (
         <Space>
           {getStatusIcon(record.status)}
           <div>
-            <div style={{ fontWeight: 500 }}>{record.name}</div>
+            <div style={{ fontWeight: 500 }}>{name}</div>
             <Text type="secondary" style={{ fontSize: '12px' }}>
               {record.type.replace('_', ' ')} • {record.location}
             </Text>
@@ -214,8 +249,9 @@ const EquipmentStatus: React.FC = () => {
     },
     {
       title: t('common.actions'),
+      dataIndex: 'actions',
       key: 'actions',
-      render: (record: Equipment) => (
+      render: (_: any, record: Equipment) => (
         <Space>
           <Button
             size="small"
@@ -240,10 +276,11 @@ const EquipmentStatus: React.FC = () => {
         </Space>
       ),
     },
-  ];
+  ], [t, i18n.language]); // Dependency array to ensure re-calculation on language change
 
   return (
-    <div>
+    <ConfigProvider locale={i18n.language === 'en' ? enUS : jaJP}>
+      <div key={`equipment-page-${i18n.language}`}>
       <div style={{ marginBottom: '24px' }}>
         <Title level={2}>
           <ToolOutlined /> {t('equipment.title')}
@@ -262,6 +299,9 @@ const EquipmentStatus: React.FC = () => {
               value={equipmentSummary.total}
               prefix={<ToolOutlined />}
             />
+            <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
+              Debug: Total = {equipmentSummary.total}
+            </div>
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
@@ -338,12 +378,17 @@ const EquipmentStatus: React.FC = () => {
 
       {/* Equipment Table */}
       <Card title={`${t('dashboard.equipmentOverview')} (${filteredEquipment.length} ${t('equipment.items')})`}>
-        <Table
-          columns={tableColumns}
-          dataSource={filteredEquipment}
-          rowKey="id"
-          loading={loading}
-          pagination={{
+        
+        {/* Direct table rendering with fallback */}
+        {filteredEquipment.length > 0 ? (
+          <>
+            <Table
+              key={`equipment-table-${i18n.language}`}
+              columns={tableColumns}
+              dataSource={filteredEquipment}
+              rowKey="id"
+              loading={loading}
+                pagination={{
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
@@ -378,7 +423,13 @@ const EquipmentStatus: React.FC = () => {
               </div>
             ),
           }}
-        />
+            />
+          </>
+        ) : (
+          <div style={{ padding: '20px', color: 'red', border: '1px solid red' }}>
+            ❌ NO DATA: filteredEquipment.length = {filteredEquipment.length}
+          </div>
+        )}
       </Card>
 
       {/* Maintenance Schedule Modal */}
@@ -469,6 +520,7 @@ const EquipmentStatus: React.FC = () => {
         </Form>
       </Modal>
     </div>
+    </ConfigProvider>
   );
 };
 

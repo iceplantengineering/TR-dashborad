@@ -17,9 +17,26 @@ export default defineConfig({
       }
     }
   },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          antd: ['antd'],
+          charts: ['recharts']
+        }
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': '/src'
     }
+  },
+  define: {
+    // Ensure process.env is available for environment checks
+    'process.env': {}
   }
 })

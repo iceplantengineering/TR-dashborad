@@ -12,19 +12,36 @@ class WebSocketService {
     [event: string]: ((data: any) => void)[];
   } = {};
 
-  connect(url: string = 'http://localhost:5000'): void {
+  connect(url?: string): void {
+    // Get WebSocket URL from environment or use default
+    const wsUrl = url || import.meta.env.VITE_WS_URL || 'http://localhost:5000';
+    const isProduction = import.meta.env.VITE_ENVIRONMENT === 'production';
+    
     if (this.socket?.connected) {
       console.log('WebSocket already connected');
       return;
     }
 
-    this.socket = io(url, {
-      transports: ['websocket'],
-      timeout: 20000,
-      forceNew: true,
-    });
+    // Skip WebSocket connection in production if no URL is provided
+    if (isProduction && !import.meta.env.VITE_WS_URL) {
+      console.log('WebSocket disabled in production (no VITE_WS_URL configured)');
+      return;
+    }
 
-    this.setupEventHandlers();
+    try {
+      this.socket = io(wsUrl, {
+        transports: ['websocket'],
+        timeout: 20000,
+        forceNew: true,
+        autoConnect: false, // Manual connection control
+      });
+
+      this.setupEventHandlers();
+      this.socket.connect();
+    } catch (error) {
+      console.warn('WebSocket connection failed:', error);
+      // Don't throw error, continue without WebSocket
+    }
   }
 
   private setupEventHandlers(): void {
@@ -51,7 +68,12 @@ class WebSocketService {
     this.socket.on('connect_error', (error) => {
       console.error('WebSocket connection error:', error);
       this.emit('error', { error: error.message });
-      this.attemptReconnect();
+      
+      // Don't attempt reconnection in production without explicit WS URL
+      const isProduction = import.meta.env.VITE_ENVIRONMENT === 'production';
+      if (!isProduction || import.meta.env.VITE_WS_URL) {
+        this.attemptReconnect();
+      }
     });
 
     // Authentication

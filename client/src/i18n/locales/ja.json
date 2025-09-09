@@ -1,8 +1,10 @@
 {
   "common": {
     "dashboard": "ダッシュボード",
+    "processMonitoring": "プロセス監視",
     "equipment": "設備管理",
     "quality": "品質管理",
+    "environmental": "環境管理",
     "reports": "レポート",
     "settings": "設定",
     "logout": "ログアウト",

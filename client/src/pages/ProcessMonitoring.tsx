@@ -38,6 +38,13 @@ const ProcessMonitoring: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { processData, timeRange } = useAppSelector(selectDashboard);
+  
+  // Debug log for process data updates
+  useEffect(() => {
+    console.log('Process data updated:', processData?.length);
+    console.log('Latest process data:', processData?.slice(-3)); // Show last 3 items
+    console.log('Time range:', timeRange);
+  }, [processData, timeRange]);
   const { user } = useAppSelector(selectAuth);
   
   const [selectedProcess, setSelectedProcess] = useState<string>('all');
@@ -134,6 +141,14 @@ const ProcessMonitoring: React.FC = () => {
     if (selectedStage !== 'all' && data.stage !== selectedStage) return false;
     return true;
   });
+
+  // Debug filtered data
+  React.useEffect(() => {
+    console.log('ProcessMonitoring - filteredData updated:', filteredData.length);
+    console.log('ProcessMonitoring - selectedProcess:', selectedProcess);
+    console.log('ProcessMonitoring - selectedStage:', selectedStage);
+    console.log('ProcessMonitoring - latest filtered data:', filteredData.slice(-2));
+  }, [filteredData, selectedProcess, selectedStage]);
 
   const tableColumns = [
     {

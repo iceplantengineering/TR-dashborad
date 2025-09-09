@@ -79,7 +79,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     dispatch(uiActions.setSidebarCollapsed(!sidebarCollapsed));
   };
 
-  const userMenuItems = [
+  const userMenuItems: any[] = [
     {
       key: 'profile',
       icon: <UserOutlined />,
@@ -87,7 +87,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onClick: () => navigate('/settings'),
     },
     {
-      type: 'divider',
+      type: 'divider' as const,
     },
     {
       key: 'logout',
@@ -108,7 +108,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {
         key: '/process-monitoring',
         icon: <ExperimentOutlined />,
-        label: 'Process Monitoring',
+        label: t('common.processMonitoring'),
       },
       {
         key: '/equipment',
@@ -123,7 +123,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {
         key: '/environmental',
         icon: <BarChartOutlined />,
-        label: 'Environmental',
+        label: t('common.environmental'),
       },
       {
         key: '/reports',
