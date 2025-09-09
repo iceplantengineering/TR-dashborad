@@ -122,7 +122,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       },
       {
         key: '/environmental',
-        icon: <BarChartOutlined />,
+        icon: <GlobalOutlined />,
         label: t('common.environmental'),
       },
       {

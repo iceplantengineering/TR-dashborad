@@ -129,7 +129,7 @@ const EnvironmentalDashboard: React.FC = () => {
               <Option value={90}>90 Days</Option>
             </Select>
             <Button type="primary" icon={<DownloadOutlined />}>
-              Export Report
+              {t('environmental.exportReport')}
             </Button>
           </Space>
         </Col>
@@ -140,7 +140,7 @@ const EnvironmentalDashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <Card>
             <Statistic
-              title="Overall Environmental Score"
+              title={t('environmental.overallScore')}
               value={environmentalData?.overallScore || 92.5}
               precision={1}
               suffix="%"
@@ -158,7 +158,7 @@ const EnvironmentalDashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <Card>
             <Statistic
-              title="CO₂ Emissions"
+              title={t('environmental.co2Emissions')}
               value={environmentalData?.emissions?.co2?.current || 145.2}
               precision={1}
               suffix="t/day"
@@ -173,7 +173,7 @@ const EnvironmentalDashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <Card>
             <Statistic
-              title="Energy Efficiency"
+              title={t('environmental.energyEfficiency')}
               value={environmentalData?.energyConsumption?.efficiency || 94.8}
               precision={1}
               suffix="%"
@@ -188,7 +188,7 @@ const EnvironmentalDashboard: React.FC = () => {
         <Col xs={24} sm={12} md={6}>
           <Card>
             <Statistic
-              title="Water Recycled"
+              title={t('environmental.waterRecycled')}
               value={environmentalData?.waterUsage?.recycled || 65.8}
               precision={1}
               suffix="%"
@@ -205,7 +205,7 @@ const EnvironmentalDashboard: React.FC = () => {
       {/* Charts Row */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={12}>
-          <Card title="Emissions Monitoring" extra={<Tag color="green">Real-time</Tag>}>
+          <Card title={t('environmental.emissionsMonitoring')} extra={<Tag color="green">{t('environmental.realTime')}</Tag>}>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={emissionsData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -238,7 +238,7 @@ const EnvironmentalDashboard: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card title="Energy Consumption" extra={<Badge status="success" text="Efficient" />}>
+          <Card title={t('environmental.energyConsumption')} extra={<Badge status="success" text={t('environmental.efficient')} />}>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={energyData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -272,7 +272,7 @@ const EnvironmentalDashboard: React.FC = () => {
       {/* Bottom Row */}
       <Row gutter={[16, 16]}>
         <Col xs={24} md={8}>
-          <Card title="Waste Management" extra={<ReloadOutlined style={{ color: '#52c41a' }} />}>
+          <Card title={t('environmental.wasteManagement')} extra={<ReloadOutlined style={{ color: '#52c41a' }} />}>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
@@ -292,24 +292,28 @@ const EnvironmentalDashboard: React.FC = () => {
               </PieChart>
             </ResponsiveContainer>
             <div style={{ textAlign: 'center', marginTop: 16 }}>
-              {wasteData.map((item, index) => (
-                <Tag key={index} color={item.color} style={{ margin: '4px' }}>
-                  {item.name}: {item.value}%
-                </Tag>
-              ))}
+              <Tag color="#52c41a" style={{ margin: '4px' }}>
+                {t('environmental.recycled')}: 65.8%
+              </Tag>
+              <Tag color="#faad14" style={{ margin: '4px' }}>
+                {t('environmental.landfill')}: 20.2%
+              </Tag>
+              <Tag color="#f5222d" style={{ margin: '4px' }}>
+                {t('environmental.incinerated')}: 14.0%
+              </Tag>
             </div>
           </Card>
         </Col>
         <Col xs={24} md={8}>
-          <Card title="Compliance Status">
+          <Card title={t('environmental.complianceStatus')}>
             <List
               size="small"
               dataSource={[
-                { name: 'Air Quality', status: 'compliant', value: '98.5%' },
-                { name: 'Water Discharge', status: 'compliant', value: '100%' },
-                { name: 'Noise Levels', status: 'compliant', value: '95.2%' },
-                { name: 'Waste Disposal', status: 'warning', value: '88.7%' },
-                { name: 'Chemical Storage', status: 'compliant', value: '100%' },
+                { name: t('environmental.airQuality'), status: 'compliant', value: '98.5%' },
+                { name: t('environmental.waterDischarge'), status: 'compliant', value: '100%' },
+                { name: t('environmental.noiseLevels'), status: 'compliant', value: '95.2%' },
+                { name: t('environmental.wasteDisposal'), status: 'warning', value: '88.7%' },
+                { name: t('environmental.chemicalStorage'), status: 'compliant', value: '100%' },
               ]}
               renderItem={item => (
                 <List.Item>
@@ -332,31 +336,31 @@ const EnvironmentalDashboard: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} md={8}>
-          <Card title="Sustainability Targets">
+          <Card title={t('environmental.sustainabilityTargets')}>
             <div style={{ marginBottom: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <Text>Carbon Reduction</Text>
+                <Text>{t('environmental.carbonReduction')}</Text>
                 <Text strong>12.3% / 15%</Text>
               </div>
               <Progress percent={82} strokeColor="#52c41a" />
             </div>
             <div style={{ marginBottom: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <Text>Renewable Energy</Text>
+                <Text>{t('environmental.renewableEnergy')}</Text>
                 <Text strong>45.2% / 50%</Text>
               </div>
               <Progress percent={90.4} strokeColor="#1890ff" />
             </div>
             <div style={{ marginBottom: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <Text>Waste Reduction</Text>
+                <Text>{t('environmental.wasteReduction')}</Text>
                 <Text strong>28.5% / 25%</Text>
               </div>
               <Progress percent={100} strokeColor="#52c41a" />
             </div>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <Text>Water Conservation</Text>
+                <Text>{t('environmental.waterConservation')}</Text>
                 <Text strong>18.2% / 20%</Text>
               </div>
               <Progress percent={91} strokeColor="#13c2c2" />
