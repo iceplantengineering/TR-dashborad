@@ -71,7 +71,7 @@ const Reports: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('production');
   const [period, setPeriod] = useState<number>(7);
-  const [dateRange, setDateRange] = useState<any[]>([]);
+  const [dateRange, setDateRange] = useState<[any, any] | null>(null);
   
   const [productionData, setProductionData] = useState<any>(null);
   const [qualityData, setQualityData] = useState<any>(null);

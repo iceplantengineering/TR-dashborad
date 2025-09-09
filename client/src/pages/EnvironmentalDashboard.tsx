@@ -19,7 +19,7 @@ import {
   GlobalOutlined,
   ThunderboltOutlined,
   DropboxOutlined,
-  RecyclingOutlined,
+  ReloadOutlined,
   FireOutlined,
   LineChartOutlined,
   DownloadOutlined,
@@ -272,7 +272,7 @@ const EnvironmentalDashboard: React.FC = () => {
       {/* Bottom Row */}
       <Row gutter={[16, 16]}>
         <Col xs={24} md={8}>
-          <Card title="Waste Management" extra={<RecyclingOutlined style={{ color: '#52c41a' }} />}>
+          <Card title="Waste Management" extra={<ReloadOutlined style={{ color: '#52c41a' }} />}>
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
                 <Pie
