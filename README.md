@@ -24,6 +24,7 @@ A comprehensive manufacturing execution system (MES) for real-time process monit
 ### Reporting & Compliance
 - **Comprehensive Reports Dashboard**: Multi-tab interface for production, quality, and environmental reports
 - **Environmental Dashboard**: Real-time emissions monitoring, energy efficiency tracking, and sustainability targets
+- **Product Traceability**: Complete supply chain traceability with ISCC+ mass balance compliance and real-time tracking
 - **Automated Reports**: Production, quality, environmental, and ESG reports with download capabilities
 - **Compliance Tracking**: ISO 9001, ISO 14001, and industry-specific standards with visual status indicators
 - **Export Capabilities**: PDF, Excel, and CSV export options with print functionality
@@ -166,6 +167,7 @@ The application provides comprehensive internationalization support:
 - Process monitoring controls and data
 - Equipment management and maintenance
 - Quality management and inspection forms
+- Product traceability and mass balance management
 - Alert messages and notifications
 - Navigation and menu items
 
@@ -190,6 +192,7 @@ The application provides comprehensive internationalization support:
 │   │   │   ├── EquipmentStatus.tsx
 │   │   │   ├── QualityManagement.tsx
 │   │   │   ├── EnvironmentalDashboard.tsx  # Environmental monitoring
+│   │   │   ├── Traceability.tsx           # Product traceability & mass balance
 │   │   │   └── Reports.tsx                 # Comprehensive reporting
 │   │   ├── i18n/          # Internationalization
 │   │   │   ├── index.ts   # i18n configuration
@@ -429,6 +432,14 @@ npx serve dist  # Test production build locally
 ```
 
 ## 🔄 Version History
+
+- **v1.3.0** - Product Traceability & Mass Balance Management
+  - **New Traceability Dashboard**: Complete supply chain traceability with ISCC+ mass balance compliance
+  - **Multi-product Support**: Dynamic product search with detailed manufacturing history and sustainability data
+  - **Mass Balance Visualization**: Interactive process flow timelines and credit allocation management
+  - **Sustainability Tracking**: GHG emissions monitoring, carbon intensity rankings, and compliance standards
+  - **Complete Multi-language Support**: Full English/Japanese localization for all product data and technical terms
+  - **Advanced Search**: Multiple product lot search with intelligent suggestions and error handling
 
 - **v1.2.0** - Enhanced Dashboard Suite with Complete Demo Mode
   - **New Environmental Dashboard**: Comprehensive environmental monitoring with emissions tracking, energy consumption, waste management, and sustainability targets

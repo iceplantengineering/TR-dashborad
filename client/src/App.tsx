@@ -18,6 +18,7 @@ import QualityManagement from '@/pages/QualityManagement';
 import EnvironmentalDashboard from '@/pages/EnvironmentalDashboard';
 import Reports from '@/pages/Reports';
 import Settings from '@/pages/Settings';
+import Traceability from '@/pages/Traceability';
 import NotificationManager from '@/components/NotificationManager';
 
 // Protected Route component
@@ -243,6 +244,16 @@ const AppContent: React.FC = () => {
                 <ProtectedRoute>
                   <Layout>
                     <Settings />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/traceability"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Traceability />
                   </Layout>
                 </ProtectedRoute>
               }

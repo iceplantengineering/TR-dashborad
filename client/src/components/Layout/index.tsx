@@ -26,6 +26,7 @@ import {
   SunOutlined,
   MoonOutlined,
   GlobalOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '@/hooks/redux';
@@ -124,6 +125,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         key: '/environmental',
         icon: <GlobalOutlined />,
         label: t('common.environmental'),
+      },
+      {
+        key: '/traceability',
+        icon: <HistoryOutlined />,
+        label: t('common.traceability'),
       },
       {
         key: '/reports',
